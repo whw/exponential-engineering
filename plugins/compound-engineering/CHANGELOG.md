@@ -5,6 +5,36 @@ All notable changes to the compound-engineering plugin will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.24.0+fork.1] - 2026-01-11
+
+### Changed
+
+- **`/workflows:compound` command** - Complete rewrite to use Claude Code's native memory system:
+  - Writes learnings to `.claude/rules/[category]/[topic].md` (Team scope)
+  - Supports Personal scope (`.claude/local/rules/`) and Global scope (`~/.claude/rules/`)
+  - Uses AskUserQuestion tool for interactive scope selection (one learning at a time)
+  - Categories are emergent (Claude-determined based on content, not predefined)
+  - Includes "Did I miss anything?" loop for comprehensive capture
+  - Auto-adds `.claude/local/` to `.gitignore` on first Personal use
+
+- **`compound-docs` skill** - Rewritten to target native Claude Code memory locations:
+  - 4-phase process: Extract → Iterate → Missed Anything? → Write
+  - Parallel subagents for learning extraction
+  - Interactive AskUserQuestion-based scope selection
+  - Emergent category system (no fixed category list)
+
+### Removed
+
+- **`/learn` command** - Functionality merged into `/workflows:compound`
+- **compound-docs YAML schema** - Replaced with simpler rule file format
+- **`docs/solutions/` references** - Now writes to native `.claude/rules/` locations
+
+### Summary
+
+- 27 agents, 22 commands, 13 skills, 2 MCP servers
+
+---
+
 ## [2.23.2+fork.1] - 2026-01-09
 
 ### Added (fork-specific)

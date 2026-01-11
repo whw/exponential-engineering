@@ -1,82 +1,104 @@
 ---
 name: workflows:compound
-description: Document a recently solved problem to compound your team's knowledge
+description: Capture learnings from this session to compound your team's knowledge
 argument-hint: "[optional: brief context about the fix]"
 ---
 
 # /compound
 
-Coordinate multiple subagents working in parallel to document a recently solved problem.
+Capture learnings from a recently solved problem and write them to Claude Code's native memory system.
 
 ## Purpose
 
-Captures problem solutions while context is fresh, creating structured documentation in `docs/solutions/` with YAML frontmatter for searchability and future reference. Uses parallel subagents for maximum efficiency.
+Extracts learnings while context is fresh, writing rules to Claude Code's native memory locations:
 
-**Why "compound"?** Each documented solution compounds your team's knowledge. The first time you solve a problem takes research. Document it, and the next occurrence takes minutes. Knowledge compounds.
+| Scope | Location | Description |
+|-------|----------|-------------|
+| Team | `.claude/rules/[category]/` | Shared with team (git-tracked) |
+| Personal | `.claude/local/rules/[category]/` | Just you, this project |
+| Global | `~/.claude/rules/[category]/` | All your projects |
+
+**Why "compound"?** Each documented learning compounds your team's knowledge. The first time you solve a problem takes research. Capture the learning, and the next occurrence takes minutes. Knowledge compounds.
 
 ## Usage
 
 ```bash
-/workflows:compound                    # Document the most recent fix
+/workflows:compound                    # Capture learnings from this session
 /workflows:compound [brief context]    # Provide additional context hint
 ```
 
-## Execution Strategy: Parallel Subagents
+## 4-Phase Execution
 
-This command launches multiple specialized subagents IN PARALLEL to maximize efficiency:
+### Phase 1: Extract Learnings (Parallel)
 
-### 1. **Context Analyzer** (Parallel)
-   - Extracts conversation history
-   - Identifies problem type, component, symptoms
-   - Validates against CORA schema
-   - Returns: YAML frontmatter skeleton
+Launch parallel subagents to extract learnings from the session:
 
-### 2. **Solution Extractor** (Parallel)
-   - Analyzes all investigation steps
-   - Identifies root cause
-   - Extracts working solution with code examples
-   - Returns: Solution content block
+**Context Analyzer:**
+- Extracts conversation history
+- Identifies problem type, symptoms, investigation steps
+- Returns: Learning candidates with titles and descriptions
 
-### 3. **Related Docs Finder** (Parallel)
-   - Searches `docs/solutions/` for related documentation
-   - Identifies cross-references and links
-   - Finds related GitHub issues
-   - Returns: Links and relationships
+**Solution Extractor:**
+- Analyzes what worked and what didn't
+- Identifies root cause and fix
+- Returns: Solution content with code examples
 
-### 4. **Prevention Strategist** (Parallel)
-   - Develops prevention strategies
-   - Creates best practices guidance
-   - Generates test cases if applicable
-   - Returns: Prevention/testing content
+**Prevention Strategist:**
+- Develops prevention strategies
+- Creates best practices guidance
+- Returns: Prevention/pattern content
 
-### 5. **Category Classifier** (Parallel)
-   - Determines optimal `docs/solutions/` category
-   - Validates category against schema
-   - Suggests filename based on slug
-   - Returns: Final path and filename
+### Phase 2: Iterate Learnings (Interactive)
 
-### 6. **Documentation Writer** (Parallel)
-   - Assembles complete markdown file
-   - Validates YAML frontmatter
-   - Formats content for readability
-   - Creates the file in correct location
+For each extracted learning, use `AskUserQuestion` to let user choose scope:
 
-### 7. **Optional: Specialized Agent Invocation** (Post-Documentation)
-   Based on problem type detected, automatically invoke applicable agents:
-   - **performance_issue** → `performance-oracle`
-   - **security_issue** → `security-sentinel`
-   - **database_issue** → `data-integrity-guardian`
-   - **test_failure** → `cora-test-reviewer`
-   - Any code-heavy issue → `kieran-rails-reviewer` + `code-simplicity-reviewer`
+```
+Learning: "N+1 Query Prevention"
+Always use includes() when iterating over associations.
+
+→ .claude/rules/database/eager-loading.md
+
+Where should this rule live?
+
+○ Team (Recommended) - Shared with team via .claude/rules/
+○ Personal - Just you, this project via .claude/local/rules/
+○ Global - All your projects via ~/.claude/rules/
+○ Skip - Don't save this learning
+```
+
+**Category and filename determined automatically** by Claude based on content. User only chooses scope.
+
+### Phase 3: Missed Anything?
+
+After processing all extracted learnings:
+
+```
+Did I miss any learnings from this session?
+
+○ No, we're done - Proceed to write all rules
+○ Yes, there's more - Describe what was missed
+```
+
+If yes: User describes it, loop back to Phase 2 for that learning.
+
+### Phase 4: Write to Native Locations
+
+Write rule files to selected locations:
+- Team: `.claude/rules/[category]/[topic].md`
+- Personal: `.claude/local/rules/[category]/[topic].md`
+- Global: `~/.claude/rules/[category]/[topic].md`
+
+On first Personal use, automatically:
+1. Create `.claude/local/rules/` directory
+2. Add `.claude/local/` to `.gitignore`
 
 ## What It Captures
 
-- **Problem symptom**: Exact error messages, observable behavior
-- **Investigation steps tried**: What didn't work and why
-- **Root cause analysis**: Technical explanation
-- **Working solution**: Step-by-step fix with code examples
-- **Prevention strategies**: How to avoid in future
-- **Cross-references**: Links to related issues and docs
+- **Problem symptom**: What went wrong
+- **Investigation steps**: What didn't work and why
+- **Root cause**: Technical explanation
+- **Solution**: Working fix with code examples
+- **Prevention**: How to avoid in future
 
 ## Preconditions
 
@@ -92,55 +114,73 @@ This command launches multiple specialized subagents IN PARALLEL to maximize eff
   </check>
 </preconditions>
 
-## What It Creates
+## Rule File Format
 
-**Organized documentation:**
+Rules use optional YAML frontmatter for path-scoping:
 
-- File: `docs/solutions/[category]/[filename].md`
+```markdown
+---
+paths:
+  - "app/models/**/*.rb"
+---
 
-**Categories auto-detected from problem:**
+# Rule Title
 
-- build-errors/
-- test-failures/
-- runtime-errors/
-- performance-issues/
-- database-issues/
-- security-issues/
-- ui-bugs/
-- integration-issues/
-- logic-errors/
+Description of the rule/pattern.
+
+## Why
+
+Technical explanation.
+
+## Wrong
+
+```ruby
+# Bad example
+```
+
+## Correct
+
+```ruby
+# Good example
+```
+```
+
+## Emergent Categories
+
+Categories are **generated by Claude** based on content. No fixed list - new categories emerge naturally.
+
+**Before creating a new category:**
+1. Check existing categories: `ls .claude/rules/`
+2. Reuse if learning fits an existing category
+3. Create new if no good fit exists
+
+Example categories that might emerge:
+- `database` - queries, associations, migrations
+- `hotwire` - Turbo, Stimulus patterns
+- `testing` - RSpec, factories
+- `git` - commits, branches
+- `security` - auth, tokens
+- (new categories as needed)
 
 ## Success Output
 
 ```
-✓ Parallel documentation generation complete
+✓ Learnings captured
 
-Primary Subagent Results:
-  ✓ Context Analyzer: Identified performance_issue in brief_system
-  ✓ Solution Extractor: Extracted 3 code fixes
-  ✓ Related Docs Finder: Found 2 related issues
-  ✓ Prevention Strategist: Generated test cases
-  ✓ Category Classifier: docs/solutions/performance-issues/
-  ✓ Documentation Writer: Created complete markdown
+Phase 1 - Extracted:
+  • N+1 Query Prevention
+  • Eager Loading Pattern
 
-Specialized Agent Reviews (Auto-Triggered):
-  ✓ performance-oracle: Validated query optimization approach
-  ✓ kieran-rails-reviewer: Code examples meet Rails standards
-  ✓ code-simplicity-reviewer: Solution is appropriately minimal
-  ✓ every-style-editor: Documentation style verified
+Phase 2 - User Selections:
+  • N+1 Query Prevention → Team
+  • Eager Loading Pattern → Skip
 
-File created:
-- docs/solutions/performance-issues/n-plus-one-brief-generation.md
+Phase 3 - Missed Anything?: No
 
-This documentation will be searchable for future reference when similar
-issues occur in the Email Processing or Brief System modules.
+Phase 4 - Created:
+  • .claude/rules/database/eager-loading.md
 
-What's next?
-1. Continue workflow (recommended)
-2. Link related documentation
-3. Update other references
-4. View documentation
-5. Other
+These rules will be applied to future sessions working in this project.
 ```
 
 ## The Compounding Philosophy
@@ -148,55 +188,31 @@ What's next?
 This creates a compounding knowledge system:
 
 1. First time you solve "N+1 query in brief generation" → Research (30 min)
-2. Document the solution → docs/solutions/performance-issues/n-plus-one-briefs.md (5 min)
-3. Next time similar issue occurs → Quick lookup (2 min)
+2. Capture the learning → `.claude/rules/database/eager-loading.md` (5 min)
+3. Next time similar issue occurs → Claude already knows (0 min)
 4. Knowledge compounds → Team gets smarter
-
-The feedback loop:
-
-```
-Build → Test → Find Issue → Research → Improve → Document → Validate → Deploy
-    ↑                                                                      ↓
-    └──────────────────────────────────────────────────────────────────────┘
-```
 
 **Each unit of engineering work should make subsequent units of work easier—not harder.**
 
 ## Auto-Invoke
 
-<auto_invoke> <trigger_phrases> - "that worked" - "it's fixed" - "working now" - "problem solved" </trigger_phrases>
-
-<manual_override> Use /workflows:compound [context] to document immediately without waiting for auto-detection. </manual_override> </auto_invoke>
+<auto_invoke>
+  <trigger_phrases>
+    - "that worked"
+    - "it's fixed"
+    - "working now"
+    - "problem solved"
+  </trigger_phrases>
+  <manual_override>
+    Use /workflows:compound [context] to capture immediately without auto-detection.
+  </manual_override>
+</auto_invoke>
 
 ## Routes To
 
 `compound-docs` skill
 
-## Applicable Specialized Agents
-
-Based on problem type, these agents can enhance documentation:
-
-### Code Quality & Review
-- **kieran-rails-reviewer**: Reviews code examples for Rails best practices
-- **code-simplicity-reviewer**: Ensures solution code is minimal and clear
-- **pattern-recognition-specialist**: Identifies anti-patterns or repeating issues
-
-### Specific Domain Experts
-- **performance-oracle**: Analyzes performance_issue category solutions
-- **security-sentinel**: Reviews security_issue solutions for vulnerabilities
-- **cora-test-reviewer**: Creates test cases for prevention strategies
-- **data-integrity-guardian**: Reviews database_issue migrations and queries
-
-### Enhancement & Documentation
-- **best-practices-researcher**: Enriches solution with industry best practices
-- **every-style-editor**: Reviews documentation style and clarity
-- **framework-docs-researcher**: Links to Rails/gem documentation references
-
-### When to Invoke
-- **Auto-triggered** (optional): Agents can run post-documentation for enhancement
-- **Manual trigger**: User can invoke agents after /workflows:compound completes for deeper review
-
 ## Related Commands
 
-- `/research [topic]` - Deep investigation (searches docs/solutions/ for patterns)
-- `/workflows:plan` - Planning workflow (references documented solutions)
+- `/workflows:plan` - Planning workflow (references captured rules)
+- `/workflows:review` - Code review (applies captured rules)
