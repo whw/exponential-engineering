@@ -14,6 +14,7 @@ Run these slash commands in order. Do not do anything else.
 6. `/exponential-engineering:resolve_parallel`
 7. `/exponential-engineering:test-browser`
 8. `/exponential-engineering:feature-video`
-9. Output `<promise>DONE</promise>` when video is in PR
+9. `/workflows:compound`
+10. Output `<promise>DONE</promise>` when all steps complete
 
 Start with step 1 now.
