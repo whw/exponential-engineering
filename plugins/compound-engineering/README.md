@@ -1,21 +1,30 @@
-# Compounding Engineering Plugin
+# Exponential Engineering Plugin
 
 AI-powered development tools that get smarter with every use. Make each unit of engineering work easier than the last.
+
+## Required Plugins
+
+The `/lfg` command requires the `ralph-loop` plugin for autonomous looping:
+
+```bash
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin install ralph-loop@claude-plugins-official
+```
 
 ## Components
 
 | Component | Count |
 |-----------|-------|
-| Agents | 27 |
-| Commands | 24 |
-| Skills | 14 |
+| Agents | 21 |
+| Commands | 22 |
+| Skills | 13 |
 | MCP Servers | 1 |
 
 ## Agents
 
 Agents are organized into categories for easier discovery.
 
-### Review (14)
+### Review (8)
 
 | Agent | Description |
 |-------|-------------|
@@ -25,14 +34,9 @@ Agents are organized into categories for easier discovery.
 | `data-integrity-guardian` | Database migrations and data integrity |
 | `data-migration-expert` | Validate ID mappings match production, check for swapped values |
 | `deployment-verification-agent` | Create Go/No-Go deployment checklists for risky data changes |
-| `dhh-rails-reviewer` | Rails review from DHH's perspective |
-| `kieran-rails-reviewer` | Rails code review with strict conventions |
-| `kieran-python-reviewer` | Python code review with strict conventions |
-| `kieran-typescript-reviewer` | TypeScript code review with strict conventions |
 | `pattern-recognition-specialist` | Analyze code for patterns and anti-patterns |
 | `performance-oracle` | Performance analysis and optimization |
 | `security-sentinel` | Security audits and vulnerability assessments |
-| `julik-frontend-races-reviewer` | Review JavaScript/Stimulus code for race conditions |
 
 ### Research (4)
 
@@ -61,12 +65,6 @@ Agents are organized into categories for easier discovery.
 | `pr-comment-resolver` | Address PR comments and implement fixes |
 | `spec-flow-analyzer` | Analyze user flows and identify gaps in specifications |
 
-### Docs (1)
-
-| Agent | Description |
-|-------|-------------|
-| `ankane-readme-writer` | Create READMEs following Ankane-style template for Ruby gems |
-
 ## Commands
 
 ### Workflow Commands
@@ -94,11 +92,10 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 | `/reproduce-bug` | Reproduce bugs using logs and console |
 | `/resolve_parallel` | Resolve TODO comments in parallel |
 | `/resolve_pr_parallel` | Resolve PR comments in parallel |
-| `/resolve_todo_parallel` | Resolve todos in parallel |
-| `/triage` | Triage and prioritize issues |
 | `/test-browser` | Run browser tests on PR-affected pages |
 | `/xcode-test` | Build and test iOS apps on simulator |
 | `/feature-video` | Record video walkthroughs and add to PR description |
+| `/lfg` | Full autonomous engineering workflow (requires ralph-loop) |
 | `/sync-compound-engineering-plugin` | Sync whw fork with upstream Every repo |
 
 ## Skills
@@ -126,7 +123,6 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 | Skill | Description |
 |-------|-------------|
 | `every-style-editor` | Review copy for Every's style guide compliance |
-| `file-todos` | File-based todo tracking system |
 | `git-worktree` | Manage Git worktrees for parallel development |
 
 ### File Transfer
@@ -187,7 +183,8 @@ The `agent-browser` skill provides comprehensive documentation on usage.
 ## Installation
 
 ```bash
-claude /plugin install compound-engineering
+/plugin marketplace add whw/exponential-engineering
+/plugin install exponential-engineering@whw
 ```
 
 ## Known Issues

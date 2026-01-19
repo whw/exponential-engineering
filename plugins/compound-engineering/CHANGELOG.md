@@ -5,6 +5,85 @@ All notable changes to the compound-engineering plugin will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.26.5+fork.5] - 2026-01-19
+
+### Breaking Changes
+
+**File-Based Todo System Removed**
+
+The `file-todos` skill and related commands have been removed in favor of Claude Code's built-in TodoWrite tool.
+
+**Removed:**
+- `file-todos` skill - Use TodoWrite for session task tracking
+- `/triage` command - Inline approval now in `/workflows:review`
+- `/resolve_todo_parallel` command - Use `/resolve_parallel` instead
+
+**Migration:**
+- Session tracking: Automatic via TodoWrite (built into Claude Code)
+- All commands now use TodoWrite instead of creating files in `todos/` directory
+
+**Why:** TodoWrite provides native UI integration and eliminates the dual tracking system that caused confusion.
+
+### Changed
+
+- **`/workflows:review`** - Now uses TodoWrite and inline approval instead of file-todos
+- **`/test-browser`** - Uses TodoWrite instead of creating todo files
+- **`/xcode-test`** - Uses TodoWrite instead of creating todo files
+
+### Summary
+
+- 21 agents, 22 commands, 13 skills, 1 MCP server
+
+---
+
+## [2.26.5+fork.4] - 2026-01-19
+
+### Changed
+
+- **`ralph-loop` dependency** - Updated from `ralph-wiggum` to `ralph-loop` (plugin was renamed in official marketplace)
+  - Updated `/lfg` command reference
+  - Updated README installation instructions
+
+---
+
+## [2.26.5+fork.3] - 2026-01-19
+
+### Changed
+
+- **Renamed plugin** - Now displays as `exponential-engineering` while keeping `compound-engineering` folder structure for upstream compatibility
+- **`/lfg` command** - Updated references from `compound-engineering:` to `exponential-engineering:`
+- **README** - Added required plugins section for ralph-wiggum dependency
+
+### Summary
+
+- 21 agents, 24 commands, 14 skills, 1 MCP server
+
+---
+
+## [2.26.5+fork.2] - 2026-01-19
+
+### Removed
+
+- **Named researcher agents** - Removed 6 agents named after specific people:
+  - `ankane-readme-writer`
+  - `dhh-rails-reviewer`
+  - `julik-frontend-races-reviewer`
+  - `kieran-python-reviewer`
+  - `kieran-rails-reviewer`
+  - `kieran-typescript-reviewer`
+
+### Changed
+
+- **`/plan_review` command** - Updated to use generic reviewers (architecture-strategist, code-simplicity-reviewer, pattern-recognition-specialist)
+- **`/workflows:review` command** - Removed named agent references from parallel review list
+- **`/workflows:work` command** - Removed named agent references from reviewer suggestions
+
+### Summary
+
+- 21 agents, 24 commands, 14 skills, 1 MCP server
+
+---
+
 ## [2.26.5+fork.1] - 2026-01-19
 
 ### Merged from upstream

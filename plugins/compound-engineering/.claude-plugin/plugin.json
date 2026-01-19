@@ -1,18 +1,18 @@
 {
-  "name": "compound-engineering",
-  "version": "2.26.5+fork.1",
-  "description": "AI-powered development tools. 27 agents, 24 commands, 14 skills, 1 MCP server for code review, research, design, and workflow automation.",
+  "name": "exponential-engineering",
+  "version": "2.26.5+fork.5",
+  "description": "AI-powered development tools. 21 agents, 22 commands, 13 skills, 1 MCP server for code review, research, design, and workflow automation.",
   "author": {
     "name": "Willie",
     "email": "willie@every.to",
-    "url": "https://github.com/kieranklaassen"
+    "url": "https://github.com/whw"
   },
   "homepage": "https://every.to/source-code/my-ai-had-already-fixed-the-code-before-i-saw-it",
-  "repository": "https://github.com/kieranklaassen/every-marketplace",
+  "repository": "https://github.com/whw/exponential-engineering",
   "license": "MIT",
   "keywords": [
     "ai-powered",
-    "compound-engineering",
+    "exponential-engineering",
     "workflow-automation",
     "code-review",
     "rails",
@@ -20,7 +20,6 @@
     "python",
     "typescript",
     "knowledge-management",
-    "image-generation",
     "agent-browser",
     "browser-automation"
   ],
