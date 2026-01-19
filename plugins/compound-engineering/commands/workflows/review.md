@@ -54,19 +54,15 @@ Ensure that the code is ready for analysis (either in worktree or on current bra
 
 Run ALL or most of these agents at the same time:
 
-1. Task kieran-rails-reviewer(PR content)
-2. Task dhh-rails-reviewer(PR title)
-3. If turbo is used: Task rails-turbo-expert(PR content)
-4. Task git-history-analyzer(PR content)
-5. Task dependency-detective(PR content)
-6. Task pattern-recognition-specialist(PR content)
-7. Task architecture-strategist(PR content)
-8. Task code-philosopher(PR content)
-9. Task security-sentinel(PR content)
-10. Task performance-oracle(PR content)
-11. Task devops-harmony-analyst(PR content)
-12. Task data-integrity-guardian(PR content)
-13. Task agent-native-reviewer(PR content) - Verify new features are agent-accessible
+1. Task pattern-recognition-specialist(PR content)
+2. Task architecture-strategist(PR content)
+3. Task security-sentinel(PR content)
+4. Task performance-oracle(PR content)
+5. Task data-integrity-guardian(PR content)
+6. Task agent-native-reviewer(PR content) - Verify new features are agent-accessible
+7. Task code-simplicity-reviewer(PR content)
+8. If turbo is used: Task rails-turbo-expert(PR content)
+9. Task git-history-analyzer(PR content)
 
 </parallel_tasks>
 
@@ -193,9 +189,9 @@ Complete system context map with component interactions
 
 Run the Task code-simplicity-reviewer() to see if we can simplify the code.
 
-### 5. Findings Synthesis and Todo Creation Using file-todos Skill
+### 5. Findings Synthesis and Action
 
-<critical_requirement> ALL findings MUST be stored in the todos/ directory using the file-todos skill. Create todo files immediately after synthesis - do NOT present findings for user approval first. Use the skill for structured todo management. </critical_requirement>
+<critical_requirement> Use Claude Code's built-in TodoWrite tool to track findings during the session. Present findings to user with inline approval before taking action. </critical_requirement>
 
 #### Step 1: Synthesize All Findings
 
@@ -211,136 +207,65 @@ Remove duplicates, prioritize by severity and impact.
 - [ ] Assign severity levels: 🔴 CRITICAL (P1), 🟡 IMPORTANT (P2), 🔵 NICE-TO-HAVE (P3)
 - [ ] Remove duplicate or overlapping findings
 - [ ] Estimate effort for each finding (Small/Medium/Large)
+- [ ] Add all findings to TodoWrite for session tracking
 
 </synthesis_tasks>
 
-#### Step 2: Create Todo Files Using file-todos Skill
+#### Step 2: Present Findings and Get Approval
 
-<critical_instruction> Use the file-todos skill to create todo files for ALL findings immediately. Do NOT present findings one-by-one asking for user approval. Create all todo files in parallel using the skill, then summarize results to user. </critical_instruction>
+Use **AskUserQuestion** to present findings and get user decision:
 
-**Implementation Options:**
+```markdown
+**Question:** "Found X issues (Y critical, Z important). What would you like to do?"
 
-**Option A: Direct File Creation (Fast)**
-
-- Create todo files directly using Write tool
-- All findings in parallel for speed
-- Use standard template from `.claude/skills/file-todos/assets/todo-template.md`
-- Follow naming convention: `{issue_id}-pending-{priority}-{description}.md`
-
-**Option B: Sub-Agents in Parallel (Recommended for Scale)** For large PRs with 15+ findings, use sub-agents to create finding files in parallel:
-
-```bash
-# Launch multiple finding-creator agents in parallel
-Task() - Create todos for first finding
-Task() - Create todos for second finding
-Task() - Create todos for third finding
-etc. for each finding.
+**Options:**
+1. Resolve all - Start fixing all findings immediately
+2. Resolve critical only - Fix P1 items only
+3. Add to TodoWrite - Track all findings for later in this session
+4. Skip - Don't resolve any
 ```
 
-Sub-agents can:
+**Severity Definitions:**
 
-- Process multiple findings simultaneously
-- Write detailed todo files with all sections filled
-- Organize findings by severity
-- Create comprehensive Proposed Solutions
-- Add acceptance criteria and work logs
-- Complete much faster than sequential processing
+- **🔴 P1 (Critical - Blocks Merge):** Security vulnerabilities, data corruption risks, breaking changes
+- **🟡 P2 (Important - Should Fix):** Performance issues, architectural concerns, reliability issues
+- **🔵 P3 (Nice-to-Have):** Minor improvements, code cleanup, documentation updates
 
-**Execution Strategy:**
+#### Step 3: Execute Based on User Choice
 
-1. Synthesize all findings into categories (P1/P2/P3)
-2. Group findings by severity
-3. Launch 3 parallel sub-agents (one per severity level)
-4. Each sub-agent creates its batch of todos using the file-todos skill
-5. Consolidate results and present summary
+**If "Resolve all" or "Resolve critical only":**
 
-**Process (Using file-todos Skill):**
+1. Update TodoWrite with selected findings as tasks
+2. Mark first task as in_progress
+3. Implement fix following existing patterns
+4. Run tests after each fix
+5. Mark task completed, move to next
+6. Continue until all selected findings resolved
 
-1. For each finding:
+**If "Add to TodoWrite":**
 
-   - Determine severity (P1/P2/P3)
-   - Write detailed Problem Statement and Findings
-   - Create 2-3 Proposed Solutions with pros/cons/effort/risk
-   - Estimate effort (Small/Medium/Large)
-   - Add acceptance criteria and work log
-
-2. Use file-todos skill for structured todo management:
-
-   ```bash
-   skill: file-todos
-   ```
-
-   The skill provides:
-
-   - Template location: `.claude/skills/file-todos/assets/todo-template.md`
-   - Naming convention: `{issue_id}-{status}-{priority}-{description}.md`
-   - YAML frontmatter structure: status, priority, issue_id, tags, dependencies
-   - All required sections: Problem Statement, Findings, Solutions, etc.
-
-3. Create todo files in parallel:
-
-   ```bash
-   {next_id}-pending-{priority}-{description}.md
-   ```
-
-4. Examples:
-
-   ```
-   001-pending-p1-path-traversal-vulnerability.md
-   002-pending-p1-api-response-validation.md
-   003-pending-p2-concurrency-limit.md
-   004-pending-p3-unused-parameter.md
-   ```
-
-5. Follow template structure from file-todos skill: `.claude/skills/file-todos/assets/todo-template.md`
-
-**Todo File Structure (from template):**
-
-Each todo must include:
-
-- **YAML frontmatter**: status, priority, issue_id, tags, dependencies
-- **Problem Statement**: What's broken/missing, why it matters
-- **Findings**: Discoveries from agents with evidence/location
-- **Proposed Solutions**: 2-3 options, each with pros/cons/effort/risk
-- **Recommended Action**: (Filled during triage, leave blank initially)
-- **Technical Details**: Affected files, components, database changes
-- **Acceptance Criteria**: Testable checklist items
-- **Work Log**: Dated record with actions and learnings
-- **Resources**: Links to PR, issues, documentation, similar patterns
-
-**File naming convention:**
-
+Add all findings to TodoWrite as pending tasks:
 ```
-{issue_id}-{status}-{priority}-{description}.md
-
-Examples:
-- 001-pending-p1-security-vulnerability.md
-- 002-pending-p2-performance-optimization.md
-- 003-pending-p3-code-cleanup.md
+TodoWrite: [
+  {"content": "🔴 P1: [Finding 1]", "status": "pending", "activeForm": "Fixing [Finding 1]"},
+  {"content": "🟡 P2: [Finding 2]", "status": "pending", "activeForm": "Fixing [Finding 2]"},
+  ...
+]
 ```
 
-**Status values:**
+**If "Skip":**
 
-- `pending` - New findings, needs triage/decision
-- `ready` - Approved by manager, ready to work
-- `complete` - Work finished
+Present summary of findings but take no action. User can address later.
 
-**Priority values:**
+#### Step 4: Summary Report
 
-- `p1` - Critical (blocks merge, security/data issues)
-- `p2` - Important (should fix, architectural/performance)
-- `p3` - Nice-to-have (enhancements, cleanup)
+Present comprehensive summary:
 
-**Tagging:** Always add `code-review` tag, plus: `security`, `performance`, `architecture`, `rails`, `quality`, etc.
-
-#### Step 3: Summary Report
-
-After creating all todo files, present comprehensive summary:
-
-````markdown
+```markdown
 ## ✅ Code Review Complete
 
-**Review Target:** PR #XXXX - [PR Title] **Branch:** [branch-name]
+**Review Target:** PR #XXXX - [PR Title]
+**Branch:** [branch-name]
 
 ### Findings Summary:
 
@@ -349,80 +274,25 @@ After creating all todo files, present comprehensive summary:
 - **🟡 IMPORTANT (P2):** [count] - Should Fix
 - **🔵 NICE-TO-HAVE (P3):** [count] - Enhancements
 
-### Created Todo Files:
+### Action Taken:
 
-**P1 - Critical (BLOCKS MERGE):**
-
-- `001-pending-p1-{finding}.md` - {description}
-- `002-pending-p1-{finding}.md` - {description}
-
-**P2 - Important:**
-
-- `003-pending-p2-{finding}.md` - {description}
-- `004-pending-p2-{finding}.md` - {description}
-
-**P3 - Nice-to-Have:**
-
-- `005-pending-p3-{finding}.md` - {description}
+[Based on user choice: resolved, created issues, or documented]
 
 ### Review Agents Used:
 
-- kieran-rails-reviewer
+- pattern-recognition-specialist
+- architecture-strategist
 - security-sentinel
 - performance-oracle
-- architecture-strategist
+- data-integrity-guardian
 - agent-native-reviewer
-- [other agents]
+- code-simplicity-reviewer
 
 ### Next Steps:
 
-1. **Address P1 Findings**: CRITICAL - must be fixed before merge
-
-   - Review each P1 todo in detail
-   - Implement fixes or request exemption
-   - Verify fixes before merging PR
-
-2. **Triage All Todos**:
-   ```bash
-   ls todos/*-pending-*.md  # View all pending todos
-   /triage                  # Use slash command for interactive triage
-   ```
-````
-
-3. **Work on Approved Todos**:
-
-   ```bash
-   /resolve_todo_parallel  # Fix all approved items efficiently
-   ```
-
-4. **Track Progress**:
-   - Rename file when status changes: pending → ready → complete
-   - Update Work Log as you work
-   - Commit todos: `git add todos/ && git commit -m "refactor: add code review findings"`
-
-### Severity Breakdown:
-
-**🔴 P1 (Critical - Blocks Merge):**
-
-- Security vulnerabilities
-- Data corruption risks
-- Breaking changes
-- Critical architectural issues
-
-**🟡 P2 (Important - Should Fix):**
-
-- Performance issues
-- Significant architectural concerns
-- Major code quality problems
-- Reliability issues
-
-**🔵 P3 (Nice-to-Have):**
-
-- Minor improvements
-- Code cleanup
-- Optimization opportunities
-- Documentation updates
-
+[If issues created: Link to GitHub issues]
+[If resolved: Summary of fixes made]
+[If skipped: Reminder to address before merge]
 ```
 
 ### 7. End-to-End Testing (Optional)

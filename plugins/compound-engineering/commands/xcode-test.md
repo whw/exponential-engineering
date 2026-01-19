@@ -234,7 +234,7 @@ When a test fails:
 
    How to proceed?
    1. Fix now - I'll help debug and fix
-   2. Create todo - Add to todos/ for later
+   2. Add to TodoWrite - Track for later in this session
    3. Skip - Continue testing other screens
    ```
 
@@ -243,8 +243,8 @@ When a test fails:
    - Propose a fix
    - Rebuild and retest
 
-4. **If "Create todo":**
-   - Create `{id}-pending-p1-xcode-{description}.md`
+4. **If "Add to TodoWrite":**
+   - Add to TodoWrite: `{"content": "Fix Xcode test: [screen] - [description]", "status": "pending", "activeForm": "Fixing Xcode test"}`
    - Continue testing
 
 </failure_handling>

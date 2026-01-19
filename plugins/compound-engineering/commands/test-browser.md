@@ -233,7 +233,7 @@ When a test fails:
 
    How to proceed?
    1. Fix now - I'll help debug and fix
-   2. Create todo - Add to todos/ for later
+   2. Add to TodoWrite - Track for later in this session
    3. Skip - Continue testing other pages
    ```
 
@@ -243,8 +243,8 @@ When a test fails:
    - Apply fix
    - Re-run the failing test
 
-4. **If "Create todo":**
-   - Create `{id}-pending-p1-browser-test-{description}.md`
+4. **If "Add to TodoWrite":**
+   - Add to TodoWrite: `{"content": "Fix browser test: [route] - [description]", "status": "pending", "activeForm": "Fixing browser test"}`
    - Continue testing
 
 5. **If "Skip":**
