@@ -7,9 +7,9 @@ AI-powered development tools that get smarter with every use. Make each unit of 
 | Component | Count |
 |-----------|-------|
 | Agents | 27 |
-| Commands | 21 |
-| Skills | 13 |
-| MCP Servers | 2 |
+| Commands | 24 |
+| Skills | 14 |
+| MCP Servers | 1 |
 
 ## Agents
 
@@ -96,7 +96,7 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 | `/resolve_pr_parallel` | Resolve PR comments in parallel |
 | `/resolve_todo_parallel` | Resolve todos in parallel |
 | `/triage` | Triage and prioritize issues |
-| `/playwright-test` | Run browser tests on PR-affected pages |
+| `/test-browser` | Run browser tests on PR-affected pages |
 | `/xcode-test` | Build and test iOS apps on simulator |
 | `/feature-video` | Record video walkthroughs and add to PR description |
 | `/sync-compound-engineering-plugin` | Sync whw fork with upstream Every repo |
@@ -135,6 +135,12 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 |-------|-------------|
 | `rclone` | Upload files to S3, Cloudflare R2, Backblaze B2, and cloud storage |
 
+### Browser Automation
+
+| Skill | Description |
+|-------|-------------|
+| `agent-browser` | CLI-based browser automation using Vercel's agent-browser |
+
 ### Image Generation
 
 | Skill | Description |
@@ -155,18 +161,7 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 
 | Server | Description |
 |--------|-------------|
-| `playwright` | Browser automation via `@playwright/mcp` |
 | `context7` | Framework documentation lookup via Context7 |
-
-### Playwright
-
-**Tools provided:**
-- `browser_navigate` - Navigate to URLs
-- `browser_take_screenshot` - Take screenshots
-- `browser_click` - Click elements
-- `browser_fill_form` - Fill form fields
-- `browser_snapshot` - Get accessibility snapshot
-- `browser_evaluate` - Execute JavaScript
 
 ### Context7
 
@@ -178,6 +173,17 @@ Supports 100+ frameworks including Rails, React, Next.js, Vue, Django, Laravel, 
 
 MCP servers start automatically when the plugin is enabled.
 
+## Browser Automation
+
+This plugin uses **agent-browser CLI** for browser automation tasks. Install it globally:
+
+```bash
+npm install -g agent-browser
+agent-browser install  # Downloads Chromium
+```
+
+The `agent-browser` skill provides comprehensive documentation on usage.
+
 ## Installation
 
 ```bash
@@ -188,19 +194,13 @@ claude /plugin install compound-engineering
 
 ### MCP Servers Not Auto-Loading
 
-**Issue:** The bundled MCP servers (Playwright and Context7) may not load automatically when the plugin is installed.
+**Issue:** The bundled Context7 MCP server may not load automatically when the plugin is installed.
 
-**Workaround:** Manually add them to your project's `.claude/settings.json`:
+**Workaround:** Manually add it to your project's `.claude/settings.json`:
 
 ```json
 {
   "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
-      "env": {}
-    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
@@ -209,7 +209,7 @@ claude /plugin install compound-engineering
 }
 ```
 
-Or add them globally in `~/.claude/settings.json` for all projects.
+Or add it globally in `~/.claude/settings.json` for all projects.
 
 ## Version History
 

@@ -5,6 +5,23 @@ All notable changes to the compound-engineering plugin will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.26.5+fork.1] - 2026-01-19
+
+### Merged from upstream
+
+- All changes from upstream v2.25.0 through v2.26.5
+- `/lfg` command for full autonomous engineering workflow
+- `agent-browser` skill replacing Playwright MCP
+- `/workflows:work` checkbox marking and Compound Engineered badge
+- `design-iterator` auto-loads skills
+- `best-practices-researcher` checks skills first
+
+### Summary
+
+- 27 agents, 24 commands, 14 skills, 1 MCP server
+
+---
+
 ## [2.24.0+fork.2] - 2026-01-11
 
 ### Fixed
@@ -56,6 +73,118 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Summary
 
 - 27 agents, 22 commands, 13 skills, 2 MCP servers
+
+---
+
+## [2.26.5] - 2026-01-18
+
+### Changed
+
+- **`/workflows:work` command** - Now marks off checkboxes in plan document as tasks complete
+  - Added step to update original plan file (`[ ]` → `[x]`) after each task
+  - Ensures no checkboxes are left unchecked when work is done
+  - Keeps plan as living document showing progress
+
+---
+
+## [2.26.4] - 2026-01-15
+
+### Changed
+
+- **`/workflows:work` command** - PRs now include Compound Engineered badge
+  - Updated PR template to include badge at bottom linking to plugin repo
+  - Added badge requirement to quality checklist
+  - Badge provides attribution and link to the plugin that created the PR
+
+---
+
+## [2.26.3] - 2026-01-14
+
+### Changed
+
+- **`design-iterator` agent** - Now auto-loads design skills at start of iterations
+  - Added "Step 0: Discover and Load Design Skills (MANDATORY)" section
+  - Discovers skills from ~/.claude/skills/, .claude/skills/, and plugin cache
+  - Maps user context to relevant skills (Swiss design → swiss-design skill, etc.)
+  - Reads SKILL.md files to load principles into context before iterating
+  - Extracts key principles: grid specs, typography rules, color philosophy, layout principles
+  - Skills are applied throughout ALL iterations for consistent design language
+
+---
+
+## [2.26.2] - 2026-01-14
+
+### Changed
+
+- **`/test-browser` command** - Clarified to use agent-browser CLI exclusively
+  - Added explicit "CRITICAL: Use agent-browser CLI Only" section
+  - Added warning: "DO NOT use Chrome MCP tools (mcp__claude-in-chrome__*)"
+  - Added Step 0: Verify agent-browser installation before testing
+  - Added full CLI reference section at bottom
+  - Added Next.js route mapping patterns
+
+---
+
+## [2.26.1] - 2026-01-14
+
+### Changed
+
+- **`best-practices-researcher` agent** - Now checks skills before going online
+  - Phase 1: Discovers and reads relevant SKILL.md files from plugin, global, and project directories
+  - Phase 2: Only goes online for additional best practices if skills don't provide enough coverage
+  - Phase 3: Synthesizes all findings with clear source attribution (skill-based > official docs > community)
+  - Skill mappings: Rails → dhh-rails-style, Frontend → frontend-design, AI → agent-native-architecture, etc.
+  - Prioritizes curated skill knowledge over external sources for trivial/common patterns
+
+---
+
+## [2.26.0] - 2026-01-14
+
+### Added
+
+- **`/lfg` command** - Full autonomous engineering workflow
+  - Orchestrates complete feature development from plan to PR
+  - Runs: plan → deepen-plan → work → review → resolve todos → test-browser → feature-video
+  - Uses ralph-loop for autonomous completion
+  - Migrated from local command, updated to use `/test-browser` instead of `/playwright-test`
+
+### Summary
+
+- 27 agents, 21 commands, 14 skills, 1 MCP server
+
+---
+
+## [2.25.0] - 2026-01-14
+
+### Added
+
+- **`agent-browser` skill** - Browser automation using Vercel's agent-browser CLI
+  - Navigate, click, fill forms, take screenshots
+  - Uses ref-based element selection (simpler than Playwright)
+  - Works in headed or headless mode
+
+### Changed
+
+- **Replaced Playwright MCP with agent-browser** - Simpler browser automation across all browser-related features:
+  - `/test-browser` command - Now uses agent-browser CLI with headed/headless mode option
+  - `/feature-video` command - Uses agent-browser for screenshots
+  - `design-iterator` agent - Browser automation via agent-browser
+  - `design-implementation-reviewer` agent - Screenshot comparison
+  - `figma-design-sync` agent - Design verification
+  - `bug-reproduction-validator` agent - Bug reproduction
+  - `/review` workflow - Screenshot capabilities
+  - `/work` workflow - Browser testing
+
+- **`/test-browser` command** - Added "Step 0" to ask user if they want headed (visible) or headless browser mode
+
+### Removed
+
+- **Playwright MCP server** - Replaced by agent-browser CLI (simpler, no MCP overhead)
+- **`/playwright-test` command** - Renamed to `/test-browser`
+
+### Summary
+
+- 27 agents, 20 commands, 14 skills, 1 MCP server
 
 ---
 

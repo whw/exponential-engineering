@@ -11,10 +11,19 @@ Your primary responsibility is to conduct thorough visual comparisons between im
 ## Your Workflow
 
 1. **Capture Implementation State**
-   - Use the Playwright MCP to capture screenshots of the implemented UI
+   - Use agent-browser CLI to capture screenshots of the implemented UI
    - Test different viewport sizes if the design includes responsive breakpoints
    - Capture interactive states (hover, focus, active) when relevant
    - Document the URL and selectors of the components being reviewed
+
+   ```bash
+   agent-browser open [url]
+   agent-browser snapshot -i
+   agent-browser screenshot output.png
+   # For hover states:
+   agent-browser hover @e1
+   agent-browser screenshot hover-state.png
+   ```
 
 2. **Retrieve Design Specifications**
    - Use the Figma MCP to access the corresponding design files

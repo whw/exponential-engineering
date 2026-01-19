@@ -76,8 +76,11 @@ This command takes a work document (plan, specification, or todo file) and execu
      - Implement following existing conventions
      - Write tests for new functionality
      - Run tests after changes
-     - Mark task as completed
+     - Mark task as completed in TodoWrite
+     - Mark off the corresponding checkbox in the plan file ([ ] → [x])
    ```
+
+   **IMPORTANT**: Always update the original plan document by checking off completed items. Use the Edit tool to change `- [ ]` to `- [x]` for each task you finish. This keeps the plan as a living document showing progress and ensures no checkboxes are left unchecked.
 
 2. **Follow Existing Patterns**
 
@@ -181,11 +184,13 @@ This command takes a work document (plan, specification, or todo file) and execu
    bin/dev  # Run in background
    ```
 
-   **Step 2: Capture screenshots with Playwright MCP tools**
-   - `browser_navigate` to go to affected pages
-   - `browser_resize` to set viewport (desktop or mobile as needed)
-   - `browser_snapshot` to verify page state
-   - `browser_take_screenshot` to capture images
+   **Step 2: Capture screenshots with agent-browser CLI**
+   ```bash
+   agent-browser open http://localhost:3000/[route]
+   agent-browser snapshot -i
+   agent-browser screenshot output.png
+   ```
+   See the `agent-browser` skill for detailed usage.
 
    **Step 3: Upload using imgup skill**
    ```bash
@@ -225,7 +230,9 @@ This command takes a work document (plan, specification, or todo file) and execu
    ## Figma Design
    [Link if applicable]
 
-   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+   ---
+
+   [![Compound Engineered](https://img.shields.io/badge/Compound-Engineered-6366f1)](https://github.com/kieranklaassen/compound-engineering-plugin) 🤖 Generated with [Claude Code](https://claude.com/claude-code)
    EOF
    )"
    ```
@@ -284,6 +291,7 @@ Before creating PR, verify:
 - [ ] Before/after screenshots captured and uploaded (for UI changes)
 - [ ] Commit messages follow conventional format
 - [ ] PR description includes summary, testing notes, and screenshots
+- [ ] PR description includes Compound Engineered badge
 
 ## When to Use Reviewer Agents
 
