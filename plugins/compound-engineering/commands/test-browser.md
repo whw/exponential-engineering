@@ -284,8 +284,8 @@ After all tests complete, present summary:
 ### Failures: [count]
 - `/dashboard` - [issue description]
 
-### Created Todos: [count]
-- `005-pending-p1-browser-test-dashboard-error.md`
+### Session Todos: [count]
+[Listed in TodoWrite - will resolve before session ends]
 
 ### Result: [PASS / FAIL / PARTIAL]
 ```

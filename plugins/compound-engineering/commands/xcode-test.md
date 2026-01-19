@@ -283,8 +283,8 @@ After all tests complete, present summary:
 ### Failures: [count]
 - Settings screen - crash on navigation
 
-### Created Todos: [count]
-- `006-pending-p1-xcode-settings-crash.md`
+### Session Todos: [count]
+[Listed in TodoWrite - will resolve before session ends]
 
 ### Result: [PASS / FAIL / PARTIAL]
 ```
