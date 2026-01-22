@@ -11,8 +11,8 @@
   "plugins": [
     {
       "name": "exponential-engineering",
-      "description": "AI-powered development tools that get smarter with every use. Make each unit of engineering work easier than the last. Includes 21 specialized agents, 22 commands, and 13 skills.",
-      "version": "2.26.5+fork.7",
+      "description": "AI-powered development tools that get smarter with every use. Make each unit of engineering work easier than the last. Includes 21 specialized agents, 24 commands, and 13 skills.",
+      "version": "2.26.5+fork.8",
       "author": {
         "name": "Willie",
         "url": "https://github.com/whw",

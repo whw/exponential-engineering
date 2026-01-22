@@ -1,7 +1,7 @@
 {
   "name": "exponential-engineering",
-  "version": "2.26.5+fork.7",
-  "description": "AI-powered development tools. 21 agents, 22 commands, 13 skills, 1 MCP server for code review, research, design, and workflow automation.",
+  "version": "2.26.5+fork.8",
+  "description": "AI-powered development tools. 21 agents, 24 commands, 13 skills, 1 MCP server for code review, research, design, and workflow automation.",
   "author": {
     "name": "Willie",
     "email": "willie@every.to",
@@ -21,7 +21,10 @@
     "typescript",
     "knowledge-management",
     "agent-browser",
-    "browser-automation"
+    "browser-automation",
+    "swarm",
+    "beads",
+    "multi-agent"
   ],
   "mcpServers": {
     "context7": {
